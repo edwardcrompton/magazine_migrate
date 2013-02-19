@@ -1,0 +1,15 @@
+core = 7.x
+name = "Migrate - IT Pro"
+dependencies[] = "migrate"
+dependencies[] = "comment"
+dependencies[] = "dennis_migrate_tools"
+dependencies[] = "dennis_gallery"
+dependencies[] = "simpletest"
+dependencies[] = "itpro_author_extras"
+description = "Migrate IT Pro Data."
+package = Development
+
+files[] = magazine_migrate.inc
+files[] = magazine_migrate_bbcode.inc
+files[] = magazine_migrate.test
+files[] = magazine_migrate.gallery.inc

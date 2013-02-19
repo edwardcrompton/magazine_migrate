@@ -1,0 +1,187 @@
+<?php
+/**
+ * @file
+ *   Contains test classes for the magazine_migrate module
+ *
+ */
+
+module_load_include('inc', 'magazine_migrate', 'magazine_migrate');
+
+class ITProMigrateTestSuite extends DrupalUnitTestCase {
+  /**
+   * Defines the metadata required by the Drupal test interface
+   *
+   */
+  static public function getInfo() {
+    return array(
+      'name' => 'Migration helper tests',
+      'description' => 'Unit Tests for this module',
+      'group' => 'IT Pro Migrate',
+    );
+  }
+
+  /**
+   * Runs unit tests on the cleanByLine method
+   *
+   */
+  public function testCleanByLine() {
+    
+    $helper = new ITProMigrationHelper;
+    
+    /**
+     * Defining an array of the form:
+     * array (
+     *  'test_byline' => array (results array)
+     * );
+     *
+     */
+    $nameforms = array(
+      // Simple single names
+      'Joe Bloggs' => array(
+        0 => array (
+          'first_name' => 'Joe',
+          'last_name' => 'Bloggs'  
+        ),
+      ), 
+      'Joe K. Bloggs' => array(
+        0 => array (
+          'first_name' => 'Joe',
+          'last_name' => 'Bloggs'  
+        ),
+      ), 
+      'Joe K Bloggs' => array(
+        0 => array (
+          'first_name' => 'Joe',
+          'last_name' => 'Bloggs'  
+        ),
+      ), 
+      'By Joe Bloggs' => array(
+        0 => array (
+          'first_name' => 'Joe',
+          'last_name' => 'Bloggs'  
+        ),
+      ),
+      'by Joe Bloggs' => array(
+        0 => array (
+          'first_name' => 'Joe',
+          'last_name' => 'Bloggs'  
+        ),
+      ),
+      'by Joe K Bloggs' => array(
+        0 => array (
+          'first_name' => 'Joe',
+          'last_name' => 'Bloggs'  
+        ),
+      ),
+      "Joe 'Spode' Bloggs" => array(
+        0 => array (
+          'first_name' => 'Joe',
+          'last_name' => 'Bloggs'  
+        ),
+      ),
+      'Joe Bloggs at the Microsoft Convergence con' => array(
+        0 => array (
+          'first_name' => 'Joe',
+          'last_name' => 'Bloggs'  
+        ),
+      ),
+      // van
+      'Joe van Bloggs' => array(
+        0 => array (
+          'first_name' => 'Joe',
+          'last_name' => 'van Bloggs'  
+        ),
+      ),
+      // van with news agency
+      'Joe van Bloggs, Reuters European Technology Co' => array(
+        0 => array (
+          'first_name' => 'Reuters European Technology Co',
+          'last_name' => 'Content'  
+        ),
+      ), 
+      'ReutersJoe van Bloggs, European Technology Cor' => array(
+        0 => array (
+          'first_name' => 'European Technology Cor',
+          'last_name' => 'Content'  
+        ),
+      ), 
+      'Joe Bloggs and Josephine Bishop' => array(
+        0 => array (
+          'first_name' => 'Joe',
+          'last_name' => 'Bloggs'  
+        ),
+        1 => array (
+          'first_name' => 'Josephine',
+          'last_name' => 'Bishop'  
+        ),
+      ), 
+      'Joe Bloggs & Josephine Bishop' => array(
+        0 => array (
+          'first_name' => 'Joe',
+          'last_name' => 'Bloggs'  
+        ),
+        1 => array (
+          'first_name' => 'Josephine',
+          'last_name' => 'Bishop'  
+        ),
+      ), 
+      'by Joe Bloggs and Josephine van Bishop, Reuters. A' => array(
+        0 => array (
+          'first_name' => 'Joe',
+          'last_name' => 'Bloggs'  
+        ),
+        1 => array (
+          'first_name' => 'Reuters.',
+          'last_name' => 'Content'  
+        ),
+      ), 
+      'By Joe Bloggs, Josephine Bishop and Aiko Hayashi' => array(
+        0 => array (
+          'first_name' => 'Josephine Bishop',
+          'last_name' => 'Content'  
+        ),
+        1 => array (
+          'first_name' => 'Aiko',
+          'last_name' => 'Hayashi'  
+        ),
+      ), 
+      'Chris Green, IT PRO and Daisuke Wakabayashi' => array(
+        0 => array (
+          'first_name' => 'IT PRO',
+          'last_name' => 'Content'  
+        ),
+        1 => array (
+          'first_name' => 'Daisuke',
+          'last_name' => 'Wakabayashi'  
+        ),
+      ),
+    );
+    
+    foreach ($nameforms as $byline => $expected) {
+      $result = $helper->cleanByLine($byline);
+      $this->assertComplexName($result, $expected, $byline);
+    }
+  }
+  
+  /**
+   * Takes the the test results and makes sure they match expected results
+   *
+   * $param $result
+   *   The result of running the cleanByLine method
+   * $param $expected
+   *   An array of expected results of the cleanByLine method
+   * $param $byline
+   *   The original byline for display pusrposes
+   *   
+   */
+  private function assertComplexName($result, $expected, $byline) {
+    foreach ($result as $index => $name) {
+      $this->assertEqual($name['first_name'], $expected[$index]['first_name'], 'First name parsed: "'.$name['first_name'].'" /// Should be: "'.$expected[$index]['first_name'].'" /// Original: "'.$byline.'"');
+      $this->assertEqual($name['first_name'], $expected[$index]['first_name'], 'First name parsed: "'.$name['last_name'].'". /// Should be: "'.$expected[$index]['last_name'].'" /// Original: "'.$byline.'"');
+    }
+  }
+  
+}
+
+
+
