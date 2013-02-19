@@ -16,22 +16,3 @@ function magazine_migrate_migrate_api() {
 function magazine_migrate_complete() {
   // Add cleanup tasks here
 }
-
-/**
- * Activate s3:// wrapper
- * 
- * Update all imported videos with s3import:// wrapper to s3://
- * 
- * @deprecated now using remote_stream_wrapper for migrated S3 videos - these can be switched to S3 at a later date
- */
-function magazine_migrate_convert_s3_wrappers() {
-  $connection = Database::getConnection('default', 'default');
-
-  // Fix wrapper
-  $wrapper_update_sql = "UPDATE file_managed SET uri = REPLACE(uri, 's3import://', 's3://') WHERE uri LIKE 's3import://%'";
-  $connection->query($wrapper_update_sql);
-
-  // Fix mime types
-  $mime_update_sql = "UPDATE file_managed SET filemime = 'video/x-flv' WHERE filename LIKE '%.flv' AND filemime = 'application/octet-stream'";
-  $connection->query($mime_update_sql);
-}
