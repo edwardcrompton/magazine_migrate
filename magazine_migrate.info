@@ -1,11 +1,7 @@
 core = 7.x
 name = "Magazine Migrate"
 dependencies[] = "migrate"
-dependencies[] = "simpletest"
 description = "Migrate Magazine Data."
 package = Development
 
 files[] = magazine_migrate.inc
-files[] = magazine_migrate_bbcode.inc
-files[] = magazine_migrate.test
-files[] = magazine_migrate.gallery.inc

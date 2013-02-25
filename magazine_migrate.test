@@ -4,22 +4,3 @@
  *   Contains test classes for the magazine_migrate module
  *
  */
-
-module_load_include('inc', 'magazine_migrate', 'magazine_migrate');
-
-class ITProMigrateTestSuite extends DrupalUnitTestCase {
-  /**
-   * Defines the metadata required by the Drupal test interface
-   *
-   */
-  static public function getInfo() {
-    return array(
-      'name' => 'Migration helper tests',
-      'description' => 'Unit Tests for this module',
-      'group' => 'Magazine Migrate',
-    );
-  }
-}
-
-
-

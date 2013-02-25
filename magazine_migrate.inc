@@ -7,11 +7,11 @@
 
 
 /**
- * Abstract base class holding common settings for article migration.
+ * Class holding common settings for article migration.
  *
  * @see migrate.drush.inc for migrate drush commands
  */
-abstract class MagazineBaseMigration extends Migration {
+class MagazineBaseMigration extends Migration {
 
   /**
    *
@@ -23,6 +23,11 @@ abstract class MagazineBaseMigration extends Migration {
 
   public function __construct() {
     parent::__construct(MigrateGroup::getInstance('magazine_migrate'));
+
+    $query = $this->getArticlesQuery();
+    $this->source = new MigrateSourceSQL($query);
+
+    $this->destination = new MigrateDestinationNode('page');
 
     // We instantiate the MigrateMap
     $this->map = new MigrateSQLMap($this->machineName,
@@ -36,9 +41,6 @@ abstract class MagazineBaseMigration extends Migration {
       ),
       MigrateDestinationNode::getKeySchema()
     );
-    
-    $query = getArticlesQuery();
-    $this->source = new MigrateSourceSQL($query);
 
     $this->addFieldMapping('title', 'headline')
       ->description(t('Mapping headline in source to field title'));
