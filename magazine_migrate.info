@@ -1,7 +1,0 @@
-core = 7.x
-name = "Magazine Migrate"
-dependencies[] = "migrate"
-description = "Migrate Magazine Data."
-package = Development
-
-files[] = magazine_migrate.inc
