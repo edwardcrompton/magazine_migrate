@@ -11,7 +11,7 @@
  *
  * @see migrate.drush.inc for migrate drush commands
  */
-class BlogBaseMigration extends Migration {
+class LinksMigration extends Migration {
 
   /**
    *
@@ -36,14 +36,16 @@ class BlogBaseMigration extends Migration {
           'type' => 'int',
           'not null' => TRUE,
           'description' => 'Article Id',
-          'alias' => 'bp',
+          'alias' => 'u',
         )
       ),
       MigrateDestinationNode::getKeySchema()
     );
 
-    $this->addFieldMapping('title', 'headline')
+    $this->addFieldMapping('title', 'title')
       ->description(t('Mapping headline in source to field title'));
+    $this->addFieldMapping('body', 'url')
+      ->description(t('Mapping the url in source to the body'));
   }
 
   /**
@@ -76,8 +78,8 @@ class BlogBaseMigration extends Migration {
    */
   public function getArticlesQuery(){
     $query = Database::getConnection('default', 'source')
-      ->select('blog_posts', 'bp')
-      ->fields('bp', array('id', 'headline', 'date'));
+      ->select('urls', 'u')
+      ->fields('u', array('id', 'title', 'url'));
     return $query;
   }
 }
